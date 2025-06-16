@@ -665,574 +665,132 @@
     </div>
 
     <script>
-        // Data Storage (In-memory storage for this demo)
         let currentUser = null;
-        let currentUserType = null;
-        let currentQuiz = null;
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let quizTimer = null;
-        let timeLeft = 30;
 
-        // Sample data initialization
-        let users = {
-            students: [{
-                id: 1,
-                name: "Demo Student",
-                username: "student",
-                password: "password",
-                email: "student@demo.com",
-                quizHistory: []
-            }],
-            teachers: [{
-                id: 1,
-                name: "Demo Teacher",
-                username: "teacher",
-                password: "password",
-                email: "teacher@demo.com",
-                subject: "Computer Science"
-            }]
-        };
+// Dummy user database (you can replace with Firebase later)
+const users = [
+    { email: "teacher@example.com", password: "1234", role: "teacher" },
+    { email: "student@example.com", password: "1234", role: "student" }
+];
+
+// Show relevant screen
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(s => s.style.display = "none");
+    document.getElementById(id).style.display = "block";
+}
+
+// Alert helper
+function showAlert(msg) {
+    alert(msg);
+}
+
+// Login functionality
+function loginUser(email, password) {
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        currentUser = user;
+        showAlert("Login successful!");
+        showScreen(user.role === "teacher" ? "teacher-dashboard" : "student-dashboard");
+        loadDashboardData();
+    } else {
+        showAlert("Invalid credentials");
+    }
+}
+
+// Logout
+function logoutUser() {
+    localStorage.removeItem("loggedInUser");
+    location.reload();
+}
+
+// Save new quiz (teacher)
+function saveQuizToLocalStorage(quiz) {
+    let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+    quizzes.push(quiz);
+    localStorage.setItem("quizzes", JSON.stringify(quizzes));
+}
+
+// Load quizzes
+function loadQuizzesFromLocalStorage() {
+    return JSON.parse(localStorage.getItem("quizzes")) || [];
+}
+
+// Save student quiz result
+function saveStudentQuizHistory(email, history) {
+    const allHistories = JSON.parse(localStorage.getItem("quizHistories")) || {};
+    allHistories[email] = history;
+    localStorage.setItem("quizHistories", JSON.stringify(allHistories));
+}
+
+// Get student quiz result
+function getStudentQuizHistory(email) {
+    const allHistories = JSON.parse(localStorage.getItem("quizHistories")) || {};
+    return allHistories[email] || [];
+}
+
+// Load dashboard
+function loadDashboardData() {
+    if (currentUser.role === "teacher") {
+        const quizzes = loadQuizzesFromLocalStorage();
+        document.getElementById("quiz-list").innerHTML = quizzes.map((q, i) => `<li>${i + 1}. ${q.title}</li>`).join("");
+    } else if (currentUser.role === "student") {
+        const quizzes = loadQuizzesFromLocalStorage();
+        const list = quizzes.map((q, i) =>
+            `<div>
+                <strong>${q.title}</strong><br>
+                <button onclick="attemptQuiz(${i})">Take Quiz</button>
+            </div><hr>`).join("");
+        document.getElementById("quiz-take-list").innerHTML = list;
+    }
+}
+
+// Create quiz
+function createQuiz() {
+    const title = document.getElementById("quiz-title").value;
+    const question = document.getElementById("quiz-question").value;
+    const answer = document.getElementById("quiz-answer").value;
+
+    if (!title || !question || !answer) return showAlert("Please fill all fields");
+
+    const quiz = { title, question, answer };
+    saveQuizToLocalStorage(quiz);
+    showAlert("Quiz Created!");
+    document.getElementById("quiz-title").value = '';
+    document.getElementById("quiz-question").value = '';
+    document.getElementById("quiz-answer").value = '';
+    loadDashboardData();
+}
+
+// Attempt quiz
+function attemptQuiz(index) {
+    const quiz = loadQuizzesFromLocalStorage()[index];
+    const userAnswer = prompt(`Quiz: ${quiz.title}\nQ: ${quiz.question}`);
+    const correct = userAnswer.trim().toLowerCase() === quiz.answer.trim().toLowerCase();
+    const result = {
+        title: quiz.title,
+        answer: userAnswer,
+        correct: correct,
+        timestamp: new Date().toLocaleString()
+    };
+    const history = getStudentQuizHistory(currentUser.email);
+    history.push(result);
+    saveStudentQuizHistory(currentUser.email, history);
+    showAlert(correct ? "Correct Answer!" : "Wrong Answer!");
+}
+
+// Load saved user on reload
+window.onload = function () {
+    const savedUser = localStorage.getItem("loggedInUser");
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        showScreen(currentUser.role === "teacher" ? "teacher-dashboard" : "student-dashboard");
+        loadDashboardData();
+    } else {
+        showScreen("login-screen");
+    }
+};
 
-        let questions = [{
-            id: 1,
-            question: "What does HTML stand for?",
-            options: {
-                A: "HyperText Markup Language",
-                B: "High Tech Modern Language",
-                C: "Home Tool Markup Language",
-                D: "Hyperlink and Text Markup Language"
-            },
-            correct: "A"
-        }, {
-            id: 2,
-            question: "Which CSS property is used to change the text color?",
-            options: {
-                A: "font-color",
-                B: "text-color",
-                C: "color",
-                D: "foreground-color"
-            },
-            correct: "C"
-        }, {
-            id: 3,
-            question: "What does JavaScript primarily add to web pages?",
-            options: {
-                A: "Styling",
-                B: "Structure",
-                C: "Interactivity",
-                D: "Content"
-            },
-            correct: "C"
-        }, {
-            id: 4,
-            question: "Which HTML tag is used to create a hyperlink?",
-            options: {
-                A: "<link>",
-                B: "<href>",
-                C: "<a>",
-                D: "<url>"
-            },
-            correct: "C"
-        }, {
-            id: 5,
-            question: "What is the correct way to comment in CSS?",
-            options: {
-                A: "// This is a comment",
-                B: "<!-- This is a comment -->",
-                C: "/* This is a comment */",
-                D: "# This is a comment"
-            },
-            correct: "C"
-        }];
-
-        // Utility Functions
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-
-            // Update dashboard data when showing dashboards
-            if (screenId === 'student-dashboard' && currentUser) {
-                updateStudentDashboard();
-            } else if (screenId === 'teacher-dashboard' && currentUser) {
-                updateTeacherDashboard();
-            } else if (screenId === 'view-students') {
-                displayStudents();
-            } else if (screenId === 'view-questions') {
-                displayQuestions();
-            }
-        }
-
-        function showAlert(message, type = 'success') {
-            const alertContainer = document.getElementById('alert-container');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.textContent = message;
-            alertContainer.appendChild(alert);
-
-            setTimeout(() => {
-                alert.remove();
-            }, 3000);
-        }
-
-        // Authentication Functions
-        function showStudentLogin() {
-            document.getElementById('student-login-form').classList.remove('hidden');
-            document.getElementById('student-register-form').classList.add('hidden');
-        }
-
-        function showStudentRegister() {
-            document.getElementById('student-login-form').classList.add('hidden');
-            document.getElementById('student-register-form').classList.remove('hidden');
-        }
-
-        function showTeacherLogin() {
-            document.getElementById('teacher-login-form').classList.remove('hidden');
-            document.getElementById('teacher-register-form').classList.add('hidden');
-        }
-
-        function showTeacherRegister() {
-            document.getElementById('teacher-login-form').classList.add('hidden');
-            document.getElementById('teacher-register-form').classList.remove('hidden');
-        }
-
-        function studentLogin() {
-            const username = document.getElementById('student-username').value;
-            const password = document.getElementById('student-password').value;
-
-            if (!username || !password) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            const student = users.students.find(s => s.username === username && s.password === password);
-            if (student) {
-                currentUser = student;
-                currentUserType = 'student';
-                document.getElementById('student-welcome').textContent = `Welcome, ${student.name}!`;
-                showScreen('student-dashboard');
-                showAlert('Login successful!');
-            } else {
-                showAlert('Invalid username or password', 'error');
-            }
-        }
-
-        function studentRegister() {
-            const name = document.getElementById('student-reg-name').value;
-            const username = document.getElementById('student-reg-username').value;
-            const password = document.getElementById('student-reg-password').value;
-            const email = document.getElementById('student-reg-email').value;
-
-            if (!name || !username || !password || !email) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            if (users.students.find(s => s.username === username)) {
-                showAlert('Username already exists', 'error');
-                return;
-            }
-
-            const newStudent = {
-                id: users.students.length + 1,
-                name,
-                username,
-                password,
-                email,
-                quizHistory: []
-            };
-
-            users.students.push(newStudent);
-            showAlert('Registration successful! You can now login.');
-            showStudentLogin();
-        }
-
-        function teacherLogin() {
-            const username = document.getElementById('teacher-username').value;
-            const password = document.getElementById('teacher-password').value;
-
-            if (!username || !password) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            const teacher = users.teachers.find(t => t.username === username && t.password === password);
-            if (teacher) {
-                currentUser = teacher;
-                currentUserType = 'teacher';
-                document.getElementById('teacher-welcome').textContent = `Welcome, ${teacher.name}!`;
-                showScreen('teacher-dashboard');
-                showAlert('Login successful!');
-            } else {
-                showAlert('Invalid username or password', 'error');
-            }
-        }
-
-        function teacherRegister() {
-            const name = document.getElementById('teacher-reg-name').value;
-            const username = document.getElementById('teacher-reg-username').value;
-            const password = document.getElementById('teacher-reg-password').value;
-            const email = document.getElementById('teacher-reg-email').value;
-            const subject = document.getElementById('teacher-reg-subject').value;
-
-            if (!name || !username || !password || !email || !subject) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            if (users.teachers.find(t => t.username === username)) {
-                showAlert('Username already exists', 'error');
-                return;
-            }
-
-            const newTeacher = {
-                id: users.teachers.length + 1,
-                name,
-                username,
-                password,
-                email,
-                subject
-            };
-
-            users.teachers.push(newTeacher);
-            showAlert('Registration successful! You can now login.');
-            showTeacherLogin();
-        }
-
-        function logout() {
-            currentUser = null;
-            currentUserType = null;
-            showScreen('welcome');
-            showAlert('Logged out successfully!');
-        }
-
-        // Dashboard Functions
-        function updateStudentDashboard() {
-            const completedQuizzes = currentUser.quizHistory.length;
-            const totalScores = currentUser.quizHistory.reduce((sum, quiz) => sum + quiz.percentage, 0);
-            const averageScore = completedQuizzes > 0 ? Math.round(totalScores / completedQuizzes) : 0;
-
-            document.getElementById('available-quizzes').textContent = questions.length > 0 ? '1' : '0';
-            document.getElementById('completed-quizzes').textContent = completedQuizzes;
-            document.getElementById('average-score').textContent = averageScore + '%';
-
-            // Update quiz history
-            const historyList = document.getElementById('history-list');
-            historyList.innerHTML = '';
-
-            if (currentUser.quizHistory.length === 0) {
-                historyList.innerHTML = '<p style="text-align: center; color: #666;">No quiz attempts yet</p>';
-            } else {
-                currentUser.quizHistory.reverse().forEach((quiz, index) => {
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'list-item';
-                    historyItem.innerHTML = `
-                        <div class="info">
-                            <strong>Quiz #${currentUser.quizHistory.length - index}</strong>
-                            <p>Score: ${quiz.score}/${quiz.total} (${quiz.percentage}%)</p>
-                            <small>Date: ${quiz.date}</small>
-                        </div>
-                    `;
-                    historyList.appendChild(historyItem);
-                });
-            }
-        }
-
-        function updateTeacherDashboard() {
-            const totalAttempts = users.students.reduce((sum, student) => sum + student.quizHistory.length, 0);
-
-            document.getElementById('total-students').textContent = users.students.length;
-            document.getElementById('total-questions').textContent = questions.length;
-            document.getElementById('total-attempts').textContent = totalAttempts;
-        }
-
-        // Student Management Functions
-        function addStudent() {
-            const name = document.getElementById('new-student-name').value;
-            const username = document.getElementById('new-student-username').value;
-            const password = document.getElementById('new-student-password').value;
-            const email = document.getElementById('new-student-email').value;
-
-            if (!name || !username || !password || !email) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            if (users.students.find(s => s.username === username)) {
-                showAlert('Username already exists', 'error');
-                return;
-            }
-
-            const newStudent = {
-                id: users.students.length + 1,
-                name,
-                username,
-                password,
-                email,
-                quizHistory: []
-            };
-
-            users.students.push(newStudent);
-            showAlert('Student added successfully!');
-
-            // Clear form
-            document.getElementById('new-student-name').value = '';
-            document.getElementById('new-student-username').value = '';
-            document.getElementById('new-student-password').value = '';
-            document.getElementById('new-student-email').value = '';
-        }
-
-        function displayStudents() {
-            const studentsList = document.getElementById('students-list');
-            studentsList.innerHTML = '<h3>Registered Students</h3>';
-
-            if (users.students.length === 0) {
-                studentsList.innerHTML += '<p style="text-align: center; color: #666;">No students registered yet</p>';
-                return;
-            }
-
-            users.students.forEach(student => {
-                const completedQuizzes = student.quizHistory.length;
-                const totalScores = student.quizHistory.reduce((sum, quiz) => sum + quiz.percentage, 0);
-                const averageScore = completedQuizzes > 0 ? Math.round(totalScores / completedQuizzes) : 0;
-
-                const studentItem = document.createElement('div');
-                studentItem.className = 'list-item';
-                studentItem.innerHTML = `
-                    <div class="info">
-                        <strong>${student.name}</strong>
-                        <p>Username: ${student.username} | Email: ${student.email}</p>
-                        <p>Quizzes Completed: ${completedQuizzes} | Average Score: ${averageScore}%</p>
-                    </div>
-                    <div class="actions">
-                        <button class="btn btn-small btn-danger" onclick="deleteStudent(${student.id})">Delete</button>
-                    </div>
-                `;
-                studentsList.appendChild(studentItem);
-            });
-        }
-
-        function deleteStudent(studentId) {
-            if (confirm('Are you sure you want to delete this student?')) {
-                users.students = users.students.filter(s => s.id !== studentId);
-                showAlert('Student deleted successfully!');
-                displayStudents();
-            }
-        }
-
-        // Question Management Functions
-        function addQuestion() {
-            const questionText = document.getElementById('new-question-text').value;
-            const optionA = document.getElementById('new-question-a').value;
-            const optionB = document.getElementById('new-question-b').value;
-            const optionC = document.getElementById('new-question-c').value;
-            const optionD = document.getElementById('new-question-d').value;
-            const correct = document.getElementById('new-question-correct').value;
-
-            if (!questionText || !optionA || !optionB || !optionC || !optionD) {
-                showAlert('Please fill in all fields', 'error');
-                return;
-            }
-
-            const newQuestion = {
-                id: questions.length + 1,
-                question: questionText,
-                options: {
-                    A: optionA,
-                    B: optionB,
-                    C: optionC,
-                    D: optionD
-                },
-                correct: correct
-            };
-
-            questions.push(newQuestion);
-            showAlert('Question added successfully!');
-
-            // Clear form
-            document.getElementById('new-question-text').value = '';
-            document.getElementById('new-question-a').value = '';
-            document.getElementById('new-question-b').value = '';
-            document.getElementById('new-question-c').value = '';
-            document.getElementById('new-question-d').value = '';
-        }
-
-        function displayQuestions() {
-            const questionsList = document.getElementById('questions-list');
-            questionsList.innerHTML = '<h3>All Questions</h3>';
-
-            if (questions.length === 0) {
-                questionsList.innerHTML += '<p style="text-align: center; color: #666;">No questions available yet</p>';
-                return;
-            }
-
-            questions.forEach((q, index) => {
-                const questionItem = document.createElement('div');
-                questionItem.className = 'list-item';
-                questionItem.innerHTML = `
-                    <div class="info">
-                        <strong>Q${index + 1}: ${q.question}</strong>
-                        <p>A) ${q.options.A}</p>
-                        <p>B) ${q.options.B}</p>
-                        <p>C) ${q.options.C}</p>
-                        <p>D) ${q.options.D}</p>
-                        <p><strong>Correct Answer: ${q.correct}) ${q.options[q.correct]}</strong></p>
-                    </div>
-                    <div class="actions">
-                        <button class="btn btn-small btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
-                    </div>
-                `;
-                questionsList.appendChild(questionItem);
-            });
-        }
-
-        function deleteQuestion(questionId) {
-            if (confirm('Are you sure you want to delete this question?')) {
-                questions = questions.filter(q => q.id !== questionId);
-                showAlert('Question deleted successfully!');
-                displayQuestions();
-            }
-        }
-
-        // Quiz Functions
-        function startQuiz() {
-            if (questions.length === 0) {
-                showAlert('No questions available. Please contact your teacher.', 'error');
-                return;
-            }
-
-            currentQuiz = {
-                questions: [...questions].sort(() => Math.random() - 0.5), // Shuffle questions
-                startTime: new Date()
-            };
-
-            currentQuestionIndex = 0;
-            userAnswers = [];
-
-            document.getElementById('total-questions-display').textContent = currentQuiz.questions.length;
-            showScreen('quiz');
-            displayQuestion();
-            startTimer();
-        }
-
-        function displayQuestion() {
-            const question = currentQuiz.questions[currentQuestionIndex];
-            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
-
-            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
-            document.getElementById('progress').style.width = progress + '%';
-            document.getElementById('question-text').textContent = question.question;
-
-            const optionsContainer = document.getElementById('answer-options');
-            optionsContainer.innerHTML = '';
-
-            Object.keys(question.options).forEach(key => {
-                const option = document.createElement('div');
-                option.className = 'answer-option';
-                option.innerHTML = `<strong>${key})</strong> ${question.options[key]}`;
-                option.onclick = () => selectAnswer(key, option);
-                optionsContainer.appendChild(option);
-            });
-
-            document.getElementById('next-btn').disabled = true;
-            timeLeft = 30;
-            document.getElementById('timer').textContent = timeLeft;
-        }
-
-        function selectAnswer(answer, element) {
-            // Remove previous selections
-            document.querySelectorAll('.answer-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-
-            // Mark current selection
-            element.classList.add('selected');
-            userAnswers[currentQuestionIndex] = answer;
-            document.getElementById('next-btn').disabled = false;
-        }
-
-        function nextQuestion() {
-            if (userAnswers[currentQuestionIndex] === undefined) {
-                showAlert('Please select an answer', 'error');
-                return;
-            }
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex < currentQuiz.questions.length) {
-                displayQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        function startTimer() {
-            clearInterval(quizTimer);
-            quizTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    // Auto-select random answer if time runs out
-                    if (userAnswers[currentQuestionIndex] === undefined) {
-                        const options = ['A', 'B', 'C', 'D'];
-                        userAnswers[currentQuestionIndex] = options[Math.floor(Math.random() * options.length)];
-                    }
-                    nextQuestion();
-                }
-            }, 1000);
-        }
-
-        function finishQuiz() {
-            clearInterval(quizTimer);
-
-            let score = 0;
-            currentQuiz.questions.forEach((question, index) => {
-                if (userAnswers[index] === question.correct) {
-                    score++;
-                }
-            });
-
-            const percentage = Math.round((score / currentQuiz.questions.length) * 100);
-            const quizResult = {
-                score: score,
-                total: currentQuiz.questions.length,
-                percentage: percentage,
-                date: new Date().toLocaleDateString(),
-                answers: userAnswers
-            };
-
-            // Save to user history
-            currentUser.quizHistory.push(quizResult);
-
-            // Display results
-            document.getElementById('final-score').textContent = `${score}/${currentQuiz.questions.length}`;
-            document.getElementById('score-percentage').textContent = `${percentage}%`;
-
-            let message = '';
-            if (percentage >= 90) message = '🎉 Excellent! Outstanding performance!';
-            else if (percentage >= 80) message = '🌟 Great job! Well done!';
-            else if (percentage >= 70) message = '👍 Good work! Keep it up!';
-            else if (percentage >= 60) message = '📚 Not bad! Room for improvement.';
-            else message = '💪 Keep studying! You can do better!';
-
-            document.getElementById('score-message').textContent = message;
-            showScreen('results');
-        }
-
-        function exitQuiz() {
-            if (confirm('Are you sure you want to exit the quiz? Your progress will be lost.')) {
-                clearInterval(quizTimer);
-                showScreen('student-dashboard');
-            }
-        }
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            showScreen('welcome');
-        });
     </script>
 </body>
 
