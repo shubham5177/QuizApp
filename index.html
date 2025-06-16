@@ -768,7 +768,7 @@
         function showAlert(message, type = 'success') {
             const alertContainer = document.getElementById('alert-container');
             const alert = document.createElement('div');
-            alert.className = alert alert-${type};
+            alert.className = `alert alert-${type}`;
             alert.textContent = message;
             alertContainer.appendChild(alert);
 
@@ -811,7 +811,7 @@
             if (student) {
                 currentUser = student;
                 currentUserType = 'student';
-                document.getElementById('student-welcome').textContent = Welcome, ${student.name}!;
+                document.getElementById('student-welcome').textContent = `Welcome, ${student.name}!`;
                 showScreen('student-dashboard');
                 showAlert('Login successful!');
             } else {
@@ -862,7 +862,7 @@
             if (teacher) {
                 currentUser = teacher;
                 currentUserType = 'teacher';
-                document.getElementById('teacher-welcome').textContent = Welcome, ${teacher.name}!;
+                document.getElementById('teacher-welcome').textContent = `Welcome, ${teacher.name}!`;
                 showScreen('teacher-dashboard');
                 showAlert('Login successful!');
             } else {
@@ -925,16 +925,16 @@
             if (currentUser.quizHistory.length === 0) {
                 historyList.innerHTML = '<p style="text-align: center; color: #666;">No quiz attempts yet</p>';
             } else {
-                currentUser.quizHistory.reverse().forEach((quiz, index) => {
+                currentUser.quizHistory.slice().reverse().forEach((quiz, index) => {
                     const historyItem = document.createElement('div');
                     historyItem.className = 'list-item';
-                    historyItem.innerHTML = 
+                    historyItem.innerHTML = `
                         <div class="info">
-                            <strong>Quiz #${currentUser.quizHistory.length - index}</strong>
+                            <strong>Quiz# ${currentUser.quizHistory.length - index}</strong>
                             <p>Score: ${quiz.score}/${quiz.total} (${quiz.percentage}%)</p>
                             <small>Date: ${quiz.date}</small>
                         </div>
-                    ;
+                    `;
                     historyList.appendChild(historyItem);
                 });
             }
@@ -1000,16 +1000,17 @@
 
                 const studentItem = document.createElement('div');
                 studentItem.className = 'list-item';
-                studentItem.innerHTML = 
-                    <div class="info">
-                        <strong>${student.name}</strong>
-                        <p>Username: ${student.username} | Email: ${student.email}</p>
-                        <p>Quizzes Completed: ${completedQuizzes} | Average Score: ${averageScore}%</p>
-                    </div>
-                    <div class="actions">
-                        <button class="btn btn-small btn-danger" onclick="deleteStudent(${student.id})">Delete</button>
-                    </div>
-                ;
+                studentItem.innerHTML =
+                    `<div>
+                        <div class="info">
+                            <strong>${student.name}</strong>
+                            <p>Username: ${student.username} | Email: ${student.email}</p>
+                            <p>Quizzes Completed: ${completedQuizzes} | Average Score: ${averageScore}%</p>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-small btn-danger" onclick="deleteStudent(${student.id})">Delete</button>
+                        </div>
+                    </div>`;
                 studentsList.appendChild(studentItem);
             });
         }
@@ -1071,19 +1072,20 @@
             questions.forEach((q, index) => {
                 const questionItem = document.createElement('div');
                 questionItem.className = 'list-item';
-                questionItem.innerHTML = 
-                    <div class="info">
-                        <strong>Q${index + 1}: ${q.question}</strong>
-                        <p>A) ${q.options.A}</p>
-                        <p>B) ${q.options.B}</p>
-                        <p>C) ${q.options.C}</p>
-                        <p>D) ${q.options.D}</p>
-                        <p><strong>Correct Answer: ${q.correct}) ${q.options[q.correct]}</strong></p>
-                    </div>
-                    <div class="actions">
-                        <button class="btn btn-small btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
-                    </div>
-                ;
+                questionItem.innerHTML =
+                    `<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="info">
+                            <strong>Q${index + 1}: ${q.question}</strong>
+                            <p>A) ${q.options.A}</p>
+                            <p>B) ${q.options.B}</p>
+                            <p>C) ${q.options.C}</p>
+                            <p>D) ${q.options.D}</p>
+                            <p><strong>Correct Answer: ${q.correct}) ${q.options[q.correct]}</strong></p>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-small btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
+                        </div>
+                    </div>`;
                 questionsList.appendChild(questionItem);
             });
         }
@@ -1131,7 +1133,7 @@
             Object.keys(question.options).forEach(key => {
                 const option = document.createElement('div');
                 option.className = 'answer-option';
-                option.innerHTML = <strong>${key})</strong> ${question.options[key]};
+                option.innerHTML = `<strong>${key})</strong> ${question.options[key]}`;
                 option.onclick = () => selectAnswer(key, option);
                 optionsContainer.appendChild(option);
             });
@@ -1208,8 +1210,8 @@
             currentUser.quizHistory.push(quizResult);
 
             // Display results
-            document.getElementById('final-score').textContent = ${score}/${currentQuiz.questions.length};
-            document.getElementById('score-percentage').textContent = ${percentage}%;
+            document.getElementById('final-score').textContent = score + '/' + currentQuiz.questions.length;
+            document.getElementById('score-percentage').textContent = percentage + '%';
 
             let message = '';
             if (percentage >= 90) message = '🎉 Excellent! Outstanding performance!';
@@ -1234,6 +1236,8 @@
             showScreen('welcome');
         });
     </script>
+
+
 </body>
 
 </html>
