@@ -665,35 +665,34 @@
     </div>
 
     <script>
-        // Data Storage (In-memory storage for this demo)
-        let currentUser = null;
-        let currentUserType = null;
-        let currentQuiz = null;
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let quizTimer = null;
-        let timeLeft = 30;
+        <script type="module">
+      // Import Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+      // Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyBKV9CDTEahMrIlMcUPXfxcplPYhq69Zos",
+        authDomain: "quizapp-9d169.firebaseapp.com",
+        projectId: "quizapp-9d169",
+        storageBucket: "quizapp-9d169.firebasestorage.app",
+        messagingSenderId: "22154401175",
+        appId: "1:22154401175:web:3c66050ea470a092e0e0d2"
+      };
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
 
-        // Sample data initialization
-        let users = {
-            students: [{
-                id: 1,
-                name: "Demo Student",
-                username: "student",
-                password: "password",
-                email: "student@demo.com",
-                quizHistory: []
-            }],
-            teachers: [{
-                id: 1,
-                name: "Demo Teacher",
-                username: "teacher",
-                password: "password",
-                email: "teacher@demo.com",
-                subject: "Computer Science"
-            }]
-        };
+      // Local Storage Example Functions (call from anywhere in your scripts)
+      window.saveQuizProgress = function(progress) {
+        // progress should be an object, e.g. {score: 5, question: 2}
+        localStorage.setItem('quizProgress', JSON.stringify(progress));
+      }
 
+      window.loadQuizProgress = function() {
+        const data = localStorage.getItem('quizProgress');
+        return data ? JSON.parse(data) : null;
+      }
+    </script>
+
+<script>
         let questions = [{
             id: 1,
             question: "What does HTML stand for?",
