@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,22 +20,22 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 40px;
             max-width: 800px;
             width: 100%;
             transition: all 0.3s ease;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .header h1 {
             color: #333;
             font-size: 2.5rem;
@@ -46,39 +45,33 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .header p {
             color: #666;
             font-size: 1.1rem;
         }
-        
+
         .screen {
             display: none;
         }
-        
+
         .screen.active {
             display: block;
             animation: fadeIn 0.5s ease;
         }
-        
+
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .auth-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 30px;
         }
-        
+
         .btn {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -90,35 +83,33 @@
             transition: all 0.3s ease;
             font-weight: 600;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #ffecd2, #fcb69f);
             color: #333;
         }
-        
+
         .btn-danger {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             color: #333;
             font-weight: 600;
         }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e1e5e9;
@@ -126,14 +117,12 @@
             font-size: 1rem;
             transition: border-color 0.3s ease;
         }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         .question-card {
             background: #f8f9fa;
             border-radius: 15px;
@@ -141,14 +130,14 @@
             margin: 20px 0;
             border-left: 5px solid #667eea;
         }
-        
+
         .question-title {
             font-size: 1.3rem;
             color: #333;
             margin-bottom: 20px;
             font-weight: 600;
         }
-        
+
         .answer-option {
             background: white;
             border: 2px solid #e1e5e9;
@@ -159,27 +148,27 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .answer-option:hover {
             border-color: #667eea;
             transform: translateX(5px);
         }
-        
+
         .answer-option.selected {
             border-color: #667eea;
             background: linear-gradient(135deg, #667eea10, #764ba210);
         }
-        
+
         .answer-option.correct {
             border-color: #28a745;
             background: linear-gradient(135deg, #28a74510, #20c99710);
         }
-        
+
         .answer-option.incorrect {
             border-color: #dc3545;
             background: linear-gradient(135deg, #dc354510, #e7474710);
         }
-        
+
         .progress-bar {
             background: #e1e5e9;
             height: 8px;
@@ -187,14 +176,14 @@
             margin: 20px 0;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             background: linear-gradient(135deg, #667eea, #764ba2);
             height: 100%;
             border-radius: 4px;
             transition: width 0.3s ease;
         }
-        
+
         .score-display {
             text-align: center;
             padding: 40px;
@@ -202,27 +191,27 @@
             border-radius: 15px;
             margin: 20px 0;
         }
-        
+
         .score-display h2 {
             color: #333;
             font-size: 2rem;
             margin-bottom: 15px;
         }
-        
+
         .score-display .score {
             font-size: 3rem;
             font-weight: bold;
             color: #667eea;
             margin: 20px 0;
         }
-        
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
-        
+
         .dashboard-card {
             background: linear-gradient(135deg, #667eea10, #764ba210);
             border-radius: 15px;
@@ -231,31 +220,30 @@
             border: 2px solid #e1e5e9;
             transition: all 0.3s ease;
         }
-        
+
         .dashboard-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        
+
         .dashboard-card h3 {
             color: #333;
             margin-bottom: 10px;
         }
-        
+
         .dashboard-card .number {
             font-size: 2rem;
             font-weight: bold;
             color: #667eea;
         }
-        
-        .student-list,
-        .question-list {
+
+        .student-list, .question-list {
             background: #f8f9fa;
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
         }
-        
+
         .list-item {
             background: white;
             border-radius: 10px;
@@ -264,50 +252,50 @@
             display: flex;
             justify-content: between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .list-item .info {
             flex: 1;
         }
-        
+
         .list-item .actions {
             display: flex;
             gap: 10px;
         }
-        
+
         .btn-small {
             padding: 8px 15px;
             font-size: 0.9rem;
             border-radius: 5px;
         }
-        
+
         .alert {
             padding: 15px;
             border-radius: 10px;
             margin: 15px 0;
             border-left: 5px solid;
         }
-        
+
         .alert-success {
             background: #d4edda;
             border-color: #28a745;
             color: #155724;
         }
-        
+
         .alert-error {
             background: #f8d7da;
             border-color: #dc3545;
             color: #721c24;
         }
-        
+
         .navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px 0;
         }
-        
+
         .back-btn {
             background: none;
             border: 2px solid #667eea;
@@ -317,34 +305,36 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .back-btn:hover {
             background: #667eea;
             color: white;
         }
-        
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
                 margin: 10px;
             }
+            
             .header h1 {
                 font-size: 2rem;
             }
+            
             .auth-buttons {
                 grid-template-columns: 1fr;
             }
+            
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         .hidden {
             display: none;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <!-- Welcome Screen -->
@@ -353,7 +343,7 @@
                 <h1>🎓 QuizMaster</h1>
                 <p>Interactive Learning Platform for Students and Teachers</p>
             </div>
-
+            
             <div class="auth-buttons">
                 <button class="btn" onclick="showScreen('student-auth')">
                     👨‍🎓 Student Login
@@ -371,7 +361,7 @@
                 <h2>Student Portal</h2>
                 <div></div>
             </div>
-
+            
             <div id="student-login-form">
                 <h3>Login</h3>
                 <div class="form-group">
@@ -384,7 +374,7 @@
                 </div>
                 <button class="btn" onclick="studentLogin()">Login</button>
                 <p style="text-align: center; margin-top: 15px;">
-                    Don't have an account?
+                    Don't have an account? 
                     <a href="#" onclick="showStudentRegister()" style="color: #667eea;">Register here</a>
                 </p>
             </div>
@@ -409,7 +399,7 @@
                 </div>
                 <button class="btn" onclick="studentRegister()">Register</button>
                 <p style="text-align: center; margin-top: 15px;">
-                    Already have an account?
+                    Already have an account? 
                     <a href="#" onclick="showStudentLogin()" style="color: #667eea;">Login here</a>
                 </p>
             </div>
@@ -422,7 +412,7 @@
                 <h2>Teacher Portal</h2>
                 <div></div>
             </div>
-
+            
             <div id="teacher-login-form">
                 <h3>Login</h3>
                 <div class="form-group">
@@ -435,7 +425,7 @@
                 </div>
                 <button class="btn" onclick="teacherLogin()">Login</button>
                 <p style="text-align: center; margin-top: 15px;">
-                    Don't have an account?
+                    Don't have an account? 
                     <a href="#" onclick="showTeacherRegister()" style="color: #667eea;">Register here</a>
                 </p>
             </div>
@@ -464,7 +454,7 @@
                 </div>
                 <button class="btn" onclick="teacherRegister()">Register</button>
                 <p style="text-align: center; margin-top: 15px;">
-                    Already have an account?
+                    Already have an account? 
                     <a href="#" onclick="showTeacherLogin()" style="color: #667eea;">Login here</a>
                 </p>
             </div>
@@ -477,7 +467,7 @@
                 <h2>Student Dashboard</h2>
                 <div id="student-welcome"></div>
             </div>
-
+            
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <h3>Available Quizzes</h3>
@@ -510,7 +500,7 @@
                 <h2>Teacher Dashboard</h2>
                 <div id="teacher-welcome"></div>
             </div>
-
+            
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <h3>Total Students</h3>
@@ -541,7 +531,7 @@
                 <h2>Add New Student</h2>
                 <div></div>
             </div>
-
+            
             <div class="form-group">
                 <label>Full Name:</label>
                 <input type="text" id="new-student-name" placeholder="Enter student's full name">
@@ -568,7 +558,7 @@
                 <h2>Add New Question</h2>
                 <div></div>
             </div>
-
+            
             <div class="form-group">
                 <label>Question:</label>
                 <textarea id="new-question-text" rows="3" placeholder="Enter your question"></textarea>
@@ -608,7 +598,7 @@
                 <h2>All Students</h2>
                 <div></div>
             </div>
-
+            
             <div id="students-list" class="student-list"></div>
         </div>
 
@@ -619,7 +609,7 @@
                 <h2>All Questions</h2>
                 <div></div>
             </div>
-
+            
             <div id="questions-list" class="question-list"></div>
         </div>
 
@@ -630,7 +620,7 @@
                 <div>Question <span id="current-question">1</span> of <span id="total-questions-display">10</span></div>
                 <div>Time: <span id="timer">30</span>s</div>
             </div>
-
+            
             <div class="progress-bar">
                 <div class="progress-fill" id="progress"></div>
             </div>
@@ -665,85 +655,96 @@
     </div>
 
     <script>
-        <script type="module">
-      // Import Firebase
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-      // Your Firebase config
-      const firebaseConfig = {
-        apiKey: "AIzaSyBKV9CDTEahMrIlMcUPXfxcplPYhq69Zos",
-        authDomain: "quizapp-9d169.firebaseapp.com",
-        projectId: "quizapp-9d169",
-        storageBucket: "quizapp-9d169.firebasestorage.app",
-        messagingSenderId: "22154401175",
-        appId: "1:22154401175:web:3c66050ea470a092e0e0d2"
-      };
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
+        // Data Storage (In-memory storage for this demo)
+        let currentUser = null;
+        let currentUserType = null;
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let quizTimer = null;
+        let timeLeft = 30;
 
-      // Local Storage Example Functions (call from anywhere in your scripts)
-      window.saveQuizProgress = function(progress) {
-        // progress should be an object, e.g. {score: 5, question: 2}
-        localStorage.setItem('quizProgress', JSON.stringify(progress));
-      }
+        // Sample data initialization
+        let users = {
+            students: [
+                {
+                    id: 1,
+                    name: "Demo Student",
+                    username: "student",
+                    password: "password",
+                    email: "student@demo.com",
+                    quizHistory: []
+                }
+            ],
+            teachers: [
+                {
+                    id: 1,
+                    name: "Demo Teacher",
+                    username: "teacher",
+                    password: "password",
+                    email: "teacher@demo.com",
+                    subject: "Computer Science"
+                }
+            ]
+        };
 
-      window.loadQuizProgress = function() {
-        const data = localStorage.getItem('quizProgress');
-        return data ? JSON.parse(data) : null;
-      }
-    </script>
-
-<script>
-        let questions = [{
-            id: 1,
-            question: "What does HTML stand for?",
-            options: {
-                A: "HyperText Markup Language",
-                B: "High Tech Modern Language",
-                C: "Home Tool Markup Language",
-                D: "Hyperlink and Text Markup Language"
+        let questions = [
+            {
+                id: 1,
+                question: "What does HTML stand for?",
+                options: {
+                    A: "HyperText Markup Language",
+                    B: "High Tech Modern Language",
+                    C: "Home Tool Markup Language",
+                    D: "Hyperlink and Text Markup Language"
+                },
+                correct: "A"
             },
-            correct: "A"
-        }, {
-            id: 2,
-            question: "Which CSS property is used to change the text color?",
-            options: {
-                A: "font-color",
-                B: "text-color",
-                C: "color",
-                D: "foreground-color"
+            {
+                id: 2,
+                question: "Which CSS property is used to change the text color?",
+                options: {
+                    A: "font-color",
+                    B: "text-color",
+                    C: "color",
+                    D: "foreground-color"
+                },
+                correct: "C"
             },
-            correct: "C"
-        }, {
-            id: 3,
-            question: "What does JavaScript primarily add to web pages?",
-            options: {
-                A: "Styling",
-                B: "Structure",
-                C: "Interactivity",
-                D: "Content"
+            {
+                id: 3,
+                question: "What does JavaScript primarily add to web pages?",
+                options: {
+                    A: "Styling",
+                    B: "Structure",
+                    C: "Interactivity",
+                    D: "Content"
+                },
+                correct: "C"
             },
-            correct: "C"
-        }, {
-            id: 4,
-            question: "Which HTML tag is used to create a hyperlink?",
-            options: {
-                A: "<link>",
-                B: "<href>",
-                C: "<a>",
-                D: "<url>"
+            {
+                id: 4,
+                question: "Which HTML tag is used to create a hyperlink?",
+                options: {
+                    A: "<link>",
+                    B: "<href>",
+                    C: "<a>",
+                    D: "<url>"
+                },
+                correct: "C"
             },
-            correct: "C"
-        }, {
-            id: 5,
-            question: "What is the correct way to comment in CSS?",
-            options: {
-                A: "// This is a comment",
-                B: "<!-- This is a comment -->",
-                C: "/* This is a comment */",
-                D: "# This is a comment"
-            },
-            correct: "C"
-        }];
+            {
+                id: 5,
+                question: "What is the correct way to comment in CSS?",
+                options: {
+                    A: "// This is a comment",
+                    B: "<!-- This is a comment -->",
+                    C: "/* This is a comment */",
+                    D: "# This is a comment"
+                },
+                correct: "C"
+            }
+        ];
 
         // Utility Functions
         function showScreen(screenId) {
@@ -751,7 +752,7 @@
                 screen.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
-
+            
             // Update dashboard data when showing dashboards
             if (screenId === 'student-dashboard' && currentUser) {
                 updateStudentDashboard();
@@ -770,7 +771,7 @@
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
             alertContainer.appendChild(alert);
-
+            
             setTimeout(() => {
                 alert.remove();
             }, 3000);
@@ -800,7 +801,7 @@
         function studentLogin() {
             const username = document.getElementById('student-username').value;
             const password = document.getElementById('student-password').value;
-
+            
             if (!username || !password) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -823,7 +824,7 @@
             const username = document.getElementById('student-reg-username').value;
             const password = document.getElementById('student-reg-password').value;
             const email = document.getElementById('student-reg-email').value;
-
+            
             if (!name || !username || !password || !email) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -851,7 +852,7 @@
         function teacherLogin() {
             const username = document.getElementById('teacher-username').value;
             const password = document.getElementById('teacher-password').value;
-
+            
             if (!username || !password) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -875,7 +876,7 @@
             const password = document.getElementById('teacher-reg-password').value;
             const email = document.getElementById('teacher-reg-email').value;
             const subject = document.getElementById('teacher-reg-subject').value;
-
+            
             if (!name || !username || !password || !email || !subject) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -920,16 +921,16 @@
             // Update quiz history
             const historyList = document.getElementById('history-list');
             historyList.innerHTML = '';
-
+            
             if (currentUser.quizHistory.length === 0) {
                 historyList.innerHTML = '<p style="text-align: center; color: #666;">No quiz attempts yet</p>';
             } else {
-                currentUser.quizHistory.slice().reverse().forEach((quiz, index) => {
+                currentUser.quizHistory.reverse().forEach((quiz, index) => {
                     const historyItem = document.createElement('div');
                     historyItem.className = 'list-item';
                     historyItem.innerHTML = `
                         <div class="info">
-                            <strong>Quiz# ${currentUser.quizHistory.length - index}</strong>
+                            <strong>Quiz #${currentUser.quizHistory.length - index}</strong>
                             <p>Score: ${quiz.score}/${quiz.total} (${quiz.percentage}%)</p>
                             <small>Date: ${quiz.date}</small>
                         </div>
@@ -941,7 +942,7 @@
 
         function updateTeacherDashboard() {
             const totalAttempts = users.students.reduce((sum, student) => sum + student.quizHistory.length, 0);
-
+            
             document.getElementById('total-students').textContent = users.students.length;
             document.getElementById('total-questions').textContent = questions.length;
             document.getElementById('total-attempts').textContent = totalAttempts;
@@ -953,7 +954,7 @@
             const username = document.getElementById('new-student-username').value;
             const password = document.getElementById('new-student-password').value;
             const email = document.getElementById('new-student-email').value;
-
+            
             if (!name || !username || !password || !email) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -975,7 +976,7 @@
 
             users.students.push(newStudent);
             showAlert('Student added successfully!');
-
+            
             // Clear form
             document.getElementById('new-student-name').value = '';
             document.getElementById('new-student-username').value = '';
@@ -986,7 +987,7 @@
         function displayStudents() {
             const studentsList = document.getElementById('students-list');
             studentsList.innerHTML = '<h3>Registered Students</h3>';
-
+            
             if (users.students.length === 0) {
                 studentsList.innerHTML += '<p style="text-align: center; color: #666;">No students registered yet</p>';
                 return;
@@ -999,17 +1000,16 @@
 
                 const studentItem = document.createElement('div');
                 studentItem.className = 'list-item';
-                studentItem.innerHTML =
-                    `<div>
-                        <div class="info">
-                            <strong>${student.name}</strong>
-                            <p>Username: ${student.username} | Email: ${student.email}</p>
-                            <p>Quizzes Completed: ${completedQuizzes} | Average Score: ${averageScore}%</p>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-small btn-danger" onclick="deleteStudent(${student.id})">Delete</button>
-                        </div>
-                    </div>`;
+                studentItem.innerHTML = `
+                    <div class="info">
+                        <strong>${student.name}</strong>
+                        <p>Username: ${student.username} | Email: ${student.email}</p>
+                        <p>Quizzes Completed: ${completedQuizzes} | Average Score: ${averageScore}%</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteStudent(${student.id})">Delete</button>
+                    </div>
+                `;
                 studentsList.appendChild(studentItem);
             });
         }
@@ -1030,7 +1030,7 @@
             const optionC = document.getElementById('new-question-c').value;
             const optionD = document.getElementById('new-question-d').value;
             const correct = document.getElementById('new-question-correct').value;
-
+            
             if (!questionText || !optionA || !optionB || !optionC || !optionD) {
                 showAlert('Please fill in all fields', 'error');
                 return;
@@ -1050,7 +1050,7 @@
 
             questions.push(newQuestion);
             showAlert('Question added successfully!');
-
+            
             // Clear form
             document.getElementById('new-question-text').value = '';
             document.getElementById('new-question-a').value = '';
@@ -1062,7 +1062,7 @@
         function displayQuestions() {
             const questionsList = document.getElementById('questions-list');
             questionsList.innerHTML = '<h3>All Questions</h3>';
-
+            
             if (questions.length === 0) {
                 questionsList.innerHTML += '<p style="text-align: center; color: #666;">No questions available yet</p>';
                 return;
@@ -1071,20 +1071,19 @@
             questions.forEach((q, index) => {
                 const questionItem = document.createElement('div');
                 questionItem.className = 'list-item';
-                questionItem.innerHTML =
-                    `<div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="info">
-                            <strong>Q${index + 1}: ${q.question}</strong>
-                            <p>A) ${q.options.A}</p>
-                            <p>B) ${q.options.B}</p>
-                            <p>C) ${q.options.C}</p>
-                            <p>D) ${q.options.D}</p>
-                            <p><strong>Correct Answer: ${q.correct}) ${q.options[q.correct]}</strong></p>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-small btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
-                        </div>
-                    </div>`;
+                questionItem.innerHTML = `
+                    <div class="info">
+                        <strong>Q${index + 1}: ${q.question}</strong>
+                        <p>A) ${q.options.A}</p>
+                        <p>B) ${q.options.B}</p>
+                        <p>C) ${q.options.C}</p>
+                        <p>D) ${q.options.D}</p>
+                        <p><strong>Correct Answer: ${q.correct}) ${q.options[q.correct]}</strong></p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
+                    </div>
+                `;
                 questionsList.appendChild(questionItem);
             });
         }
@@ -1108,10 +1107,10 @@
                 questions: [...questions].sort(() => Math.random() - 0.5), // Shuffle questions
                 startTime: new Date()
             };
-
+            
             currentQuestionIndex = 0;
             userAnswers = [];
-
+            
             document.getElementById('total-questions-display').textContent = currentQuiz.questions.length;
             showScreen('quiz');
             displayQuestion();
@@ -1121,14 +1120,14 @@
         function displayQuestion() {
             const question = currentQuiz.questions[currentQuestionIndex];
             const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
-
+            
             document.getElementById('current-question').textContent = currentQuestionIndex + 1;
             document.getElementById('progress').style.width = progress + '%';
             document.getElementById('question-text').textContent = question.question;
-
+            
             const optionsContainer = document.getElementById('answer-options');
             optionsContainer.innerHTML = '';
-
+            
             Object.keys(question.options).forEach(key => {
                 const option = document.createElement('div');
                 option.className = 'answer-option';
@@ -1136,7 +1135,7 @@
                 option.onclick = () => selectAnswer(key, option);
                 optionsContainer.appendChild(option);
             });
-
+            
             document.getElementById('next-btn').disabled = true;
             timeLeft = 30;
             document.getElementById('timer').textContent = timeLeft;
@@ -1147,7 +1146,7 @@
             document.querySelectorAll('.answer-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
-
+            
             // Mark current selection
             element.classList.add('selected');
             userAnswers[currentQuestionIndex] = answer;
@@ -1161,7 +1160,7 @@
             }
 
             currentQuestionIndex++;
-
+            
             if (currentQuestionIndex < currentQuiz.questions.length) {
                 displayQuestion();
             } else {
@@ -1174,7 +1173,7 @@
             quizTimer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').textContent = timeLeft;
-
+                
                 if (timeLeft <= 0) {
                     // Auto-select random answer if time runs out
                     if (userAnswers[currentQuestionIndex] === undefined) {
@@ -1188,14 +1187,14 @@
 
         function finishQuiz() {
             clearInterval(quizTimer);
-
+            
             let score = 0;
             currentQuiz.questions.forEach((question, index) => {
                 if (userAnswers[index] === question.correct) {
                     score++;
                 }
             });
-
+            
             const percentage = Math.round((score / currentQuiz.questions.length) * 100);
             const quizResult = {
                 score: score,
@@ -1204,21 +1203,21 @@
                 date: new Date().toLocaleDateString(),
                 answers: userAnswers
             };
-
+            
             // Save to user history
             currentUser.quizHistory.push(quizResult);
-
+            
             // Display results
-            document.getElementById('final-score').textContent = score + '/' + currentQuiz.questions.length;
-            document.getElementById('score-percentage').textContent = percentage + '%';
-
+            document.getElementById('final-score').textContent = `${score}/${currentQuiz.questions.length}`;
+            document.getElementById('score-percentage').textContent = `${percentage}%`;
+            
             let message = '';
             if (percentage >= 90) message = '🎉 Excellent! Outstanding performance!';
             else if (percentage >= 80) message = '🌟 Great job! Well done!';
             else if (percentage >= 70) message = '👍 Good work! Keep it up!';
             else if (percentage >= 60) message = '📚 Not bad! Room for improvement.';
             else message = '💪 Keep studying! You can do better!';
-
+            
             document.getElementById('score-message').textContent = message;
             showScreen('results');
         }
@@ -1235,8 +1234,5 @@
             showScreen('welcome');
         });
     </script>
-
-
 </body>
-
 </html>
